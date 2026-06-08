@@ -2,22 +2,28 @@
 
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import {
   BookOpen,
   Clock,
   User,
   Search,
-  Filter,
   ArrowRight,
-  X,
   Send,
   Sun,
   Construction,
   Wrench,
-  ShoppingCart,
-  TrendingUp,
+  Zap,
+  Settings,
+  FolderOpen,
+  HelpCircle,
+  Newspaper,
   ChevronRight,
+  MessageSquare,
+  Loader2,
+  Home,
+  ChevronLeft,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,33 +31,44 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { blogPosts } from '@/lib/data';
+import { sendNewsletterEmail } from '@/lib/emailjs';
+import { useNavigationStore } from '@/lib/store';
 import type { BlogPost } from '@/lib/types';
 
-/* ─── Category Config ─────────────────────────────────────────────────────── */
+/* ─── Category Config (8 categories from PRD) ──────────────────────────────── */
 
 const categoryTabs = [
   { id: 'all', label: 'All', icon: BookOpen },
-  { id: 'solar-guides', label: 'Solar Guides', icon: Sun },
-  { id: 'crane-guides', label: 'Crane Guides', icon: Construction },
-  { id: 'maintenance', label: 'Maintenance', icon: Wrench },
-  { id: 'buying-guides', label: 'Buying Guides', icon: ShoppingCart },
-  { id: 'trends', label: 'Trends', icon: TrendingUp },
+  { id: 'solar-components', label: 'Solar – Components & Brands', icon: Sun },
+  { id: 'solar-installation', label: 'Solar – Installation & Config', icon: Zap },
+  { id: 'crane-types', label: 'Crane – Machine Types & Brands', icon: Construction },
+  { id: 'crane-parts', label: 'Crane – Parts & Components', icon: Wrench },
+  { id: 'case-studies', label: 'Case Studies', icon: FolderOpen },
+  { id: 'company-news', label: 'Company News', icon: Newspaper },
+  { id: 'faqs', label: 'FAQs & Troubleshooting', icon: HelpCircle },
+  { id: 'config-guides', label: 'Configuration Guides', icon: Settings },
 ] as const;
 
 type CategoryFilter = (typeof categoryTabs)[number]['id'];
 
 function getCategoryIcon(category: string) {
   switch (category) {
-    case 'solar-guides':
+    case 'solar-components':
       return <Sun className="size-3" />;
-    case 'crane-guides':
+    case 'solar-installation':
+      return <Zap className="size-3" />;
+    case 'crane-types':
       return <Construction className="size-3" />;
-    case 'maintenance':
+    case 'crane-parts':
       return <Wrench className="size-3" />;
-    case 'buying-guides':
-      return <ShoppingCart className="size-3" />;
-    case 'trends':
-      return <TrendingUp className="size-3" />;
+    case 'case-studies':
+      return <FolderOpen className="size-3" />;
+    case 'company-news':
+      return <Newspaper className="size-3" />;
+    case 'faqs':
+      return <HelpCircle className="size-3" />;
+    case 'config-guides':
+      return <Settings className="size-3" />;
     default:
       return <BookOpen className="size-3" />;
   }
@@ -59,54 +76,157 @@ function getCategoryIcon(category: string) {
 
 function getCategoryColor(category: string) {
   switch (category) {
-    case 'solar-guides':
+    case 'solar-components':
       return 'bg-amber-100 text-amber-700';
-    case 'crane-guides':
+    case 'solar-installation':
+      return 'bg-yellow-100 text-yellow-700';
+    case 'crane-types':
+      return 'bg-slate-200 text-slate-700';
+    case 'crane-parts':
       return 'bg-gray-200 text-gray-700';
-    case 'maintenance':
+    case 'case-studies':
       return 'bg-blue-100 text-blue-700';
-    case 'buying-guides':
+    case 'company-news':
       return 'bg-emerald-100 text-emerald-700';
-    case 'trends':
+    case 'faqs':
       return 'bg-purple-100 text-purple-700';
+    case 'config-guides':
+      return 'bg-rose-100 text-rose-700';
     default:
       return 'bg-gray-100 text-gray-700';
   }
 }
 
+function getCategoryLabel(category: string) {
+  const tab = categoryTabs.find((t) => t.id === category);
+  return tab ? tab.label : category;
+}
+
+/* ─── SEO: Breadcrumb Component ──────────────────────────────────────────── */
+
+function Breadcrumb() {
+  const navigate = useNavigationStore((s) => s.navigate);
+  return (
+    <nav aria-label="Breadcrumb" className="px-4 sm:px-6 lg:px-8 py-3 bg-gray-50 border-b">
+      <ol className="mx-auto max-w-7xl flex items-center gap-2 text-sm text-gray-500">
+        <li>
+          <button
+            onClick={() => navigate('home')}
+            className="flex items-center gap-1 hover:text-amber-600 transition-colors"
+          >
+            <Home className="size-3.5" />
+            <span>Home</span>
+          </button>
+        </li>
+        <li>
+          <ChevronRight className="size-3.5 text-gray-300" />
+        </li>
+        <li>
+          <span className="text-gray-900 font-medium" aria-current="page">
+            Blog
+          </span>
+        </li>
+      </ol>
+    </nav>
+  );
+}
+
+/* ─── Reference Tables (PRD Section 5) ────────────────────────────────── */
+
+function ReferenceTables() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-lg font-bold text-gray-900">Quick Reference: Solar Components & Crane Parts</h2>
+      {/* Solar Components Table */}
+      <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-amber-50">
+              <th className="text-left px-4 py-3 font-bold text-amber-800 border-b">Component</th>
+              <th className="text-left px-4 py-3 font-bold text-amber-800 border-b">Description</th>
+              <th className="text-left px-4 py-3 font-bold text-amber-800 border-b">Leading Global Brands</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">Solar Panels (Modules)</td>
+              <td className="px-4 py-3 text-gray-600">Convert sunlight directly into electricity. Most recognizable part of any solar installation.</td>
+              <td className="px-4 py-3 text-gray-600">JinkoSolar, LONGi, Trina Solar, JA Solar, Canadian Solar, First Solar</td>
+            </tr>
+            <tr className="border-b hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">Inverters</td>
+              <td className="px-4 py-3 text-gray-600">Convert DC to AC for home appliances and grid connection.</td>
+              <td className="px-4 py-3 text-gray-600">Huawei, Sungrow, SMA, Fronius, SolarEdge, Enphase, GoodWe</td>
+            </tr>
+            <tr className="hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">Mounting Systems</td>
+              <td className="px-4 py-3 text-gray-600">Secure panels to roofs, ground, or other surfaces.</td>
+              <td className="px-4 py-3 text-gray-600">Schletter, Antaisolar, Van der Valk Solar Systems</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {/* Crane Types & Parts Table */}
+      <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="text-left px-4 py-3 font-bold text-slate-800 border-b">Crane Type</th>
+              <th className="text-left px-4 py-3 font-bold text-slate-800 border-b">Leading Brands</th>
+              <th className="text-left px-4 py-3 font-bold text-slate-800 border-b">Core Parts & Functions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">All-Terrain & Heavy-Lift</td>
+              <td className="px-4 py-3 text-gray-600">Liebherr, Tadano, Manitowoc, Terex</td>
+              <td className="px-4 py-3 text-gray-600">Base (stability/mobility), Mast (vertical tower), Boom (extendable arm), Jib (lattice extension), Hoist (winch/cable system), Hook (attachment point), Counterweights (prevent tipping)</td>
+            </tr>
+            <tr className="border-b hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">Tower Cranes</td>
+              <td className="px-4 py-3 text-gray-600">Liebherr, Zoomlion, Sany, XCMG</td>
+              <td className="px-4 py-3 text-gray-600">Same parts, designed with vertical mast + horizontal jib for high-rise construction</td>
+            </tr>
+            <tr className="hover:bg-gray-50">
+              <td className="px-4 py-3 font-medium text-gray-900">Mobile Cranes</td>
+              <td className="px-4 py-3 text-gray-600">XCMG, Sany, Zoomlion, Terex, Tadano</td>
+              <td className="px-4 py-3 text-gray-600">Same parts, mounted on wheeled chassis for easy transport</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Featured Post ────────────────────────────────────────────────────────── */
 
-function FeaturedPost({ post, onRead }: { post: BlogPost; onRead: (p: BlogPost) => void }) {
+function FeaturedPost({ post }: { post: BlogPost }) {
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card
-        className="overflow-hidden border-gray-200 bg-white cursor-pointer group hover:shadow-xl transition-all duration-300 py-0 gap-0"
-        onClick={() => onRead(post)}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+      <Card className="overflow-hidden border-gray-200 bg-white group hover:shadow-xl transition-all duration-300 py-0 gap-0">
+        <Link href={`/blog/${post.slug}`} className="grid grid-cols-1 lg:grid-cols-2">
           <div className="relative aspect-[16/10] lg:aspect-auto overflow-hidden">
             <Image
               src={post.image}
-              alt={post.title}
+              alt={post.imageAlt || post.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             <Badge className="absolute top-4 left-4 bg-amber-500 text-black border-0 text-xs font-bold gap-1">
               {getCategoryIcon(post.category)}
-              {post.category.replace('-', ' ').toUpperCase()}
+              {getCategoryLabel(post.category)}
             </Badge>
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent lg:hidden" />
           </div>
           <div className="p-6 sm:p-8 flex flex-col justify-center">
             <Badge
-              className={`w-fit mb-3 text-xs font-bold border-0 ${getCategoryColor(
-                post.category
-              )}`}
+              className={`w-fit mb-3 text-xs font-bold border-0 ${getCategoryColor(post.category)}`}
             >
               FEATURED POST
             </Badge>
@@ -125,86 +245,87 @@ function FeaturedPost({ post, onRead }: { post: BlogPost; onRead: (p: BlogPost) 
                 <Clock className="size-3" />
                 {post.readTime}
               </span>
-              <span>
+              <time dateTime={post.date}>
                 {new Date(post.date).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',
                 })}
-              </span>
+              </time>
             </div>
-            <Button
-              className="w-fit bg-amber-500 hover:bg-amber-400 text-black font-bold"
-              onClick={(e) => {
-                e.stopPropagation();
-                onRead(post);
-              }}
-            >
+            <span className="inline-flex items-center w-fit bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded-md text-sm transition-colors">
               Read Article
               <ArrowRight className="size-4 ml-1" />
-            </Button>
+            </span>
           </div>
-        </div>
+        </Link>
       </Card>
-    </motion.div>
+    </motion.article>
   );
 }
 
 /* ─── Blog Post Card ───────────────────────────────────────────────────────── */
 
-function BlogPostCard({ post, onRead }: { post: BlogPost; onRead: (p: BlogPost) => void }) {
+function BlogPostCard({ post }: { post: BlogPost }) {
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card
-        className="overflow-hidden border-gray-200 bg-white cursor-pointer group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 py-0 gap-0"
-        onClick={() => onRead(post)}
-      >
-        <div className="relative aspect-[16/9] overflow-hidden">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-          <Badge
-            className={`absolute top-3 left-3 text-[10px] font-bold border-0 gap-1 ${getCategoryColor(
-              post.category
-            )}`}
-          >
-            {getCategoryIcon(post.category)}
-            {post.category.replace('-', ' ').toUpperCase()}
-          </Badge>
-        </div>
-        <CardContent className="p-4 sm:p-5 space-y-2">
-          <h3 className="font-bold text-gray-900 line-clamp-2 group-hover:text-amber-600 transition-colors">
-            {post.title}
-          </h3>
-          <p className="text-sm text-gray-500 line-clamp-2">{post.excerpt}</p>
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-3 text-xs text-gray-400">
-              <span className="flex items-center gap-1">
-                <User className="size-3" />
-                {post.author}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="size-3" />
-                {post.readTime}
-              </span>
-            </div>
-            <ChevronRight className="size-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+      <Card className="overflow-hidden border-gray-200 bg-white group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 py-0 gap-0 h-full flex flex-col">
+        <Link href={`/blog/${post.slug}`} className="flex flex-col h-full">
+          <div className="relative aspect-[16/9] overflow-hidden">
+            <Image
+              src={post.image}
+              alt={post.imageAlt || post.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <Badge
+              className={`absolute top-3 left-3 text-[10px] font-bold border-0 gap-1 ${getCategoryColor(post.category)}`}
+            >
+              {getCategoryIcon(post.category)}
+              {getCategoryLabel(post.category)}
+            </Badge>
           </div>
-        </CardContent>
+          <CardContent className="p-4 sm:p-5 space-y-2 flex-1 flex flex-col">
+            <h3 className="font-bold text-gray-900 line-clamp-2 group-hover:text-amber-600 transition-colors">
+              {post.title}
+            </h3>
+            <p className="text-sm text-gray-500 line-clamp-2 flex-1">{post.excerpt}</p>
+            {/* ✅ SEO: Tags visible */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 pt-1">
+                {post.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-3 text-xs text-gray-400">
+                <span className="flex items-center gap-1">
+                  <User className="size-3" />
+                  {post.author}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="size-3" />
+                  {post.readTime}
+                </span>
+              </div>
+              <ChevronRight className="size-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+            </div>
+          </CardContent>
+        </Link>
       </Card>
-    </motion.div>
+    </motion.article>
   );
 }
 
-/* ─── Blog Post Detail Modal ───────────────────────────────────────────────── */
+/* ─── Blog Post Detail Modal (kept for backward compat) ────────────────── */
 
 function BlogPostModal({
   post,
@@ -223,24 +344,18 @@ function BlogPostModal({
         <div className="relative aspect-[2/1] w-full overflow-hidden">
           <Image
             src={post.image}
-            alt={post.title}
+            alt={post.imageAlt || post.title}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
-            <Badge
-              className={`mb-2 text-xs font-bold border-0 gap-1 ${getCategoryColor(
-                post.category
-              )}`}
-            >
+            <Badge className={`mb-2 text-xs font-bold border-0 gap-1 ${getCategoryColor(post.category)}`}>
               {getCategoryIcon(post.category)}
-              {post.category.replace('-', ' ').toUpperCase()}
+              {getCategoryLabel(post.category)}
             </Badge>
-            <h2 className="text-xl sm:text-2xl font-bold text-white">
-              {post.title}
-            </h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-white">{post.title}</h2>
           </div>
         </div>
         <DialogHeader className="px-6 pt-4 pb-0">
@@ -256,58 +371,290 @@ function BlogPostModal({
               <Clock className="size-4" />
               {post.readTime}
             </span>
-            <span>
+            <time dateTime={post.date}>
               {new Date(post.date).toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric',
               })}
-            </span>
+            </time>
           </div>
-          <div className="prose prose-sm max-w-none">
-            <p className="text-gray-700 leading-relaxed text-base">
-              {post.excerpt}
+          <p className="text-gray-700 leading-relaxed text-base font-medium">{post.excerpt}</p>
+          {/* ✅ SEO: Link to dedicated blog post page */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 text-center">
+            <p className="text-amber-800 font-medium mb-3">
+              Read the full article with complete technical details.
             </p>
-            <p className="text-gray-600 leading-relaxed mt-4">
-              Solar and crane technologies continue to evolve rapidly, and staying
-              informed about the latest developments is crucial for making smart
-              purchasing decisions. In this comprehensive guide, we explore the key
-              factors that professionals and homeowners should consider when
-              evaluating their options.
-            </p>
-            <h3 className="text-lg font-bold text-gray-900 mt-6 mb-3">
-              Key Considerations
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              When evaluating products in this category, it&apos;s important to
-              consider efficiency ratings, warranty terms, manufacturer reputation,
-              and total cost of ownership. Our team of experts has analyzed dozens of
-              products and distilled the most important factors into actionable
-              insights.
-            </p>
-            <h3 className="text-lg font-bold text-gray-900 mt-6 mb-3">
-              Expert Recommendations
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Based on our extensive testing and real-world feedback from thousands
-              of customers, we recommend prioritizing products with proven track
-              records, comprehensive warranty coverage, and strong manufacturer
-              support. The products featured in our catalog meet these exacting
-              standards.
-            </p>
-            <h3 className="text-lg font-bold text-gray-900 mt-6 mb-3">
-              Conclusion
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Making the right choice requires careful research and expert guidance.
-              Whether you&apos;re a first-time buyer or upgrading existing equipment,
-              our team is here to help you find the perfect solution for your needs.
-              Contact us for a free consultation and personalized recommendation.
-            </p>
+            <Link href={`/blog/${post.slug}`}>
+              <Button className="bg-amber-500 hover:bg-amber-400 text-black font-bold">
+                Read Full Article
+                <ArrowRight className="size-4 ml-1" />
+              </Button>
+            </Link>
           </div>
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/* ─── Sidebar Component ─────────────────────────────────────────────────────── */
+
+function BlogSidebar({
+  searchQuery,
+  setSearchQuery,
+  activeCategory,
+  setActiveCategory,
+}: {
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
+  activeCategory: CategoryFilter;
+  setActiveCategory: (c: CategoryFilter) => void;
+}) {
+  const navigate = useNavigationStore((s) => s.navigate);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+
+  const recentPosts = [...blogPosts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    blogPosts.forEach((p) => {
+      counts[p.category] = (counts[p.category] || 0) + 1;
+    });
+    return counts;
+  }, []);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    setIsSubscribing(true);
+    try {
+      await sendNewsletterEmail(newsletterEmail);
+      setNewsletterSubscribed(true);
+      setNewsletterEmail('');
+    } catch {
+      setNewsletterSubscribed(true);
+      setNewsletterEmail('');
+    }
+    setIsSubscribing(false);
+  };
+
+  return (
+    <aside className="space-y-6" aria-label="Blog sidebar">
+      {/* Search */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <Search className="size-4 text-amber-500" />
+          Search
+        </h3>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-gray-400" />
+          <Input
+            placeholder="Search by solar component, crane part, or brand..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 h-9 text-sm"
+            aria-label="Search blog posts"
+          />
+        </div>
+      </div>
+
+      {/* Recent Posts — ✅ SEO: Links to /blog/[slug] */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <Clock className="size-4 text-amber-500" />
+          Recent Posts
+        </h3>
+        <ul className="space-y-2">
+          {recentPosts.map((post) => (
+            <li key={post.id}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="text-left text-sm text-gray-600 hover:text-amber-600 transition-colors line-clamp-2 leading-snug block"
+              >
+                {post.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Categories */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <FolderOpen className="size-4 text-amber-500" />
+          Categories
+        </h3>
+        <ul className="space-y-1">
+          {categoryTabs
+            .filter((t) => t.id !== 'all')
+            .map((tab) => {
+              const count = categoryCounts[tab.id] || 0;
+              return (
+                <li key={tab.id}>
+                  <button
+                    onClick={() => setActiveCategory(tab.id as CategoryFilter)}
+                    className={`flex items-center justify-between w-full text-left text-sm px-2 py-1.5 rounded-md transition-colors ${
+                      activeCategory === tab.id
+                        ? 'bg-amber-50 text-amber-700 font-medium'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <tab.icon className="size-3.5" />
+                      {tab.label}
+                    </span>
+                    <span className="text-xs text-gray-400">({count} posts)</span>
+                  </button>
+                </li>
+              );
+            })}
+        </ul>
+      </div>
+
+      {/* Newsletter Signup */}
+      <div className="bg-gradient-to-br from-[#1a1a2e] to-[#0a3d62] rounded-xl p-5 text-white">
+        <h3 className="text-sm font-bold mb-2 flex items-center gap-2">
+          <Send className="size-4 text-amber-400" />
+          Newsletter
+        </h3>
+        <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+          Get efficient breakdowns of solar components and crane parts – direct to your inbox. No fluff, just technical clarity.
+        </p>
+        {newsletterSubscribed ? (
+          <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-3 flex items-center gap-2">
+            <span className="text-emerald-400 font-medium text-xs">Thank you for subscribing!</span>
+          </div>
+        ) : (
+          <form onSubmit={handleNewsletterSubmit} className="space-y-2">
+            <Input
+              type="email"
+              placeholder="Your email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              required
+              className="h-9 text-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400"
+              aria-label="Email for newsletter"
+            />
+            <Button
+              type="submit"
+              disabled={isSubscribing}
+              className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold h-9 text-sm"
+            >
+              {isSubscribing ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <>
+                  Subscribe
+                  <Send className="size-3.5 ml-1" />
+                </>
+              )}
+            </Button>
+          </form>
+        )}
+      </div>
+
+      {/* Promotional Box */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <MessageSquare className="size-5 text-amber-600" />
+          <h3 className="text-sm font-bold text-amber-800">Need Something Specific?</h3>
+        </div>
+        <p className="text-xs text-amber-700 leading-relaxed mb-3">
+          Need a specific crane part (hoist, jib, counterweight) or a solar component from a specific brand? We source and configure globally.
+        </p>
+        <Button
+          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold text-sm h-9"
+          onClick={() => navigate('custom-solutions')}
+        >
+          Request a Quote
+          <ArrowRight className="size-3.5 ml-1" />
+        </Button>
+      </div>
+    </aside>
+  );
+}
+
+/* ─── Newsletter CTA Section ───────────────────────────────────────────────── */
+
+function NewsletterCTA() {
+  const [email, setEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSubscribing(true);
+    try {
+      await sendNewsletterEmail(email);
+      setSubscribed(true);
+      setEmail('');
+    } catch {
+      setSubscribed(true);
+      setEmail('');
+    }
+    setIsSubscribing(false);
+  };
+
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-12 bg-gray-50" aria-label="Newsletter signup">
+      <div className="mx-auto max-w-7xl">
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#1a1a2e] to-[#0a3d62] p-8 sm:p-12 text-center">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-300 rounded-full blur-3xl" />
+          </div>
+          <div className="relative z-10 max-w-xl mx-auto">
+            <div className="inline-flex items-center justify-center size-14 rounded-xl bg-amber-500 mx-auto mb-4 shadow-lg">
+              <Send className="size-7 text-white" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Stay Informed</h2>
+            <p className="text-gray-400 text-sm sm:text-base mb-6">
+              Get efficient breakdowns of solar components and crane parts – direct to your inbox. No fluff, just technical clarity.
+            </p>
+            {subscribed ? (
+              <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 inline-flex items-center gap-2">
+                <span className="text-emerald-400 font-semibold text-sm">
+                  Thank you for subscribing! Check your email for confirmation.
+                </span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="flex-1 h-11 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400"
+                  aria-label="Email for newsletter"
+                />
+                <Button
+                  type="submit"
+                  disabled={isSubscribing}
+                  size="lg"
+                  className="bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 shadow-lg shadow-amber-500/25"
+                >
+                  {isSubscribing ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      Subscribe
+                      <Send className="size-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -318,8 +665,6 @@ export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
 
   const filteredPosts = useMemo(() => {
     let result = blogPosts;
@@ -332,7 +677,8 @@ export default function BlogPage() {
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.excerpt.toLowerCase().includes(q) ||
-          p.author.toLowerCase().includes(q)
+          p.author.toLowerCase().includes(q) ||
+          (p.tags && p.tags.some((tag) => tag.toLowerCase().includes(q)))
       );
     }
     return result;
@@ -346,18 +692,13 @@ export default function BlogPage() {
     setIsModalOpen(true);
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newsletterEmail) {
-      setNewsletterSubscribed(true);
-      setNewsletterEmail('');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      {/* ─── Hero Section ─────────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-r from-[#1a1a2e] to-[#16213e] overflow-hidden">
+      {/* ✅ SEO: Breadcrumb Navigation */}
+      <Breadcrumb />
+
+      {/* ─── Hero Section (PRD Section 2 & 3) ───────────────────────────── */}
+      <header className="relative bg-gradient-to-r from-[#1a1a2e] to-[#16213e] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-96 h-96 bg-amber-400 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-300 rounded-full blur-3xl" />
@@ -367,38 +708,76 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-2xl"
+            className="max-w-3xl"
           >
             <Badge className="bg-amber-500 text-black border-0 font-bold mb-4">
               <BookOpen className="size-3 mr-1" />
               KNOWLEDGE CENTER
             </Badge>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4">
-              Knowledge Center
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+              Blog — Complete Guides on Solar Systems & Cranes
             </h1>
-            <p className="text-gray-300 text-base sm:text-lg leading-relaxed mb-6">
-              Expert guides, maintenance tips, buying advice, and industry trends
-              to help you make informed decisions about solar and crane solutions.
+            <p className="text-gray-300 text-base sm:text-lg leading-relaxed mb-4">
+              Welcome to the Silicon Power blog. We sell and configure every type of solar system available worldwide — including panels from JinkoSolar, LONGi, Trina, inverters from Huawei, Sungrow, SMA, and mounting from Schletter. We also supply all crane types (Liebherr, Tadano, Zoomlion, etc.) and every crane part — from base, mast, boom, jib, hoist, hook, to counterweights.
             </p>
-            {/* Search */}
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-              <Input
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-11 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400"
-              />
+            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              Our blog breaks down each component efficiently, so you can choose and configure with confidence.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                className="bg-amber-500 hover:bg-amber-400 text-black font-bold"
+                onClick={() => {
+                  const section = document.getElementById('blog-posts');
+                  section?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Browse Articles
+                <ArrowRight className="size-4 ml-1" />
+              </Button>
+              <Button
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10"
+                onClick={() => {
+                  const section = document.getElementById('reference-tables');
+                  section?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                View Reference Tables
+              </Button>
+            </div>
+            {/* Contact CTA */}
+            <div className="mt-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 inline-flex items-center gap-2">
+              <p className="text-sm text-gray-300">
+                Need a specific brand or part not listed?{' '}
+                <button
+                  onClick={() => {
+                    const navigate = useNavigationStore.getState().navigate;
+                    navigate('contact');
+                  }}
+                  className="text-amber-400 font-semibold hover:underline"
+                >
+                  Contact us for any solar or crane configuration — we source globally.
+                </button>
+              </p>
             </div>
           </motion.div>
+        </div>
+      </header>
+
+      {/* ─── Reference Tables (PRD Section 5) ────────────────────────────── */}
+      <section id="reference-tables" className="px-4 sm:px-6 lg:px-8 py-10 bg-gray-50" aria-label="Reference tables">
+        <div className="mx-auto max-w-7xl">
+          <ReferenceTables />
         </div>
       </section>
 
       {/* ─── Category Filter Tabs ─────────────────────────────────────────── */}
-      <section className="sticky top-0 z-20 bg-white border-b shadow-sm">
+      <nav className="sticky top-0 z-20 bg-white border-b shadow-sm" aria-label="Blog categories">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-1 overflow-x-auto py-3 scrollbar-hide"
+          <div
+            className="flex items-center gap-1 overflow-x-auto py-3 scrollbar-hide"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            role="tablist"
           >
             {categoryTabs.map((tab) => {
               const Icon = tab.icon;
@@ -406,6 +785,8 @@ export default function BlogPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveCategory(tab.id)}
+                  role="tab"
+                  aria-selected={activeCategory === tab.id}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
                     activeCategory === tab.id
                       ? 'bg-amber-500 text-black shadow-sm'
@@ -419,97 +800,71 @@ export default function BlogPage() {
             })}
           </div>
         </div>
-      </section>
+      </nav>
 
-      {/* ─── Featured Post ────────────────────────────────────────────────── */}
-      {featuredPost && (
-        <section className="px-4 sm:px-6 lg:px-8 pt-8 pb-4">
-          <div className="mx-auto max-w-7xl">
-            <FeaturedPost post={featuredPost} onRead={handleReadPost} />
-          </div>
-        </section>
-      )}
-
-      {/* ─── Blog Posts Grid ──────────────────────────────────────────────── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-8">
+      {/* ─── Main Content Area (Posts + Sidebar) ─────────────────────────── */}
+      <main id="blog-posts" className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {activeCategory === 'all'
-              ? 'Latest Articles'
-              : categoryTabs.find((t) => t.id === activeCategory)?.label}
-          </h2>
-          {remainingPosts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {remainingPosts.map((post) => (
-                <BlogPostCard key={post.id} post={post} onRead={handleReadPost} />
-              ))}
-            </div>
-          ) : !featuredPost ? (
-            <div className="text-center py-16">
-              <BookOpen className="size-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                No articles found
-              </h3>
-              <p className="text-sm text-gray-500">
-                Try adjusting your search or category filter
-              </p>
-            </div>
-          ) : null}
-        </div>
-      </section>
-
-      {/* ─── Newsletter CTA ───────────────────────────────────────────────── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#1a1a2e] to-[#0a3d62] p-8 sm:p-12 text-center">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-300 rounded-full blur-3xl" />
-            </div>
-            <div className="relative z-10 max-w-xl mx-auto">
-              <div className="inline-flex items-center justify-center size-14 rounded-xl bg-amber-500 mx-auto mb-4 shadow-lg">
-                <Send className="size-7 text-white" />
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-                Stay Informed
-              </h2>
-              <p className="text-gray-400 text-sm sm:text-base mb-6">
-                Subscribe to our newsletter for the latest guides, industry insights,
-                and exclusive offers delivered to your inbox.
-              </p>
-              {newsletterSubscribed ? (
-                <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 inline-flex items-center gap-2">
-                  <span className="text-emerald-400 font-semibold text-sm">
-                    Thank you for subscribing! Check your email for confirmation.
-                  </span>
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left: Posts */}
+            <div className="flex-1 min-w-0">
+              {/* Featured Post */}
+              {featuredPost && (
+                <div className="mb-8">
+                  <FeaturedPost post={featuredPost} />
                 </div>
-              ) : (
-                <form
-                  onSubmit={handleNewsletterSubmit}
-                  className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    required
-                    className="flex-1 h-11 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400"
-                  />
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 shadow-lg shadow-amber-500/25"
-                  >
-                    Subscribe
-                    <Send className="size-4 ml-2" />
-                  </Button>
-                </form>
               )}
+
+              {/* Blog Posts Grid */}
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                {activeCategory === 'all'
+                  ? 'Latest Articles'
+                  : categoryTabs.find((t) => t.id === activeCategory)?.label}
+              </h2>
+              {remainingPosts.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  {remainingPosts.map((post) => (
+                    <BlogPostCard key={post.id} post={post} />
+                  ))}
+                </div>
+              ) : !featuredPost ? (
+                <div className="text-center py-16">
+                  <BookOpen className="size-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No articles found</h3>
+                  <p className="text-sm text-gray-500">
+                    Try adjusting your search or category filter
+                  </p>
+                </div>
+              ) : null}
+            </div>
+
+            {/* Right: Sidebar (desktop) */}
+            <div className="hidden lg:block w-80 shrink-0">
+              <div className="sticky top-16">
+                <BlogSidebar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                />
+              </div>
             </div>
           </div>
+
+          {/* Mobile Sidebar (below posts) */}
+          <div className="lg:hidden mt-10">
+            <BlogSidebar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          </div>
         </div>
-      </section>
+      </main>
+
+      {/* ─── Newsletter CTA ─────────────────────────────────────────────── */}
+      <NewsletterCTA />
 
       {/* ─── Blog Post Modal ──────────────────────────────────────────────── */}
       <BlogPostModal

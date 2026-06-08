@@ -18,6 +18,8 @@ import {
   Lightbulb,
   Zap,
   Send,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,6 +28,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { sendCustomSolutionEmail } from '@/lib/emailjs';
 import {
   Select,
   SelectContent,
@@ -109,6 +112,8 @@ export default function CustomSolutionPage() {
     phone: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -136,9 +141,29 @@ export default function CustomSolutionPage() {
     return encodeURIComponent(lines.join('\n'));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(false);
+
+    const result = await sendCustomSolutionEmail({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      category: formData.category === 'solar' ? 'Solar' : formData.category === 'crane' ? 'Crane' : 'Both',
+      project: formData.projectName,
+      requirements: formData.requirements,
+      budget: formData.budget || 'Not specified',
+      timeline: formData.timeline || 'Not specified',
+    });
+
+    setIsSubmitting(false);
+
+    if (result.success) {
+      setIsSubmitted(true);
+    } else {
+      setSubmitError(true);
+    }
   };
 
   const handleWhatsAppSubmit = () => {
@@ -282,11 +307,10 @@ export default function CustomSolutionPage() {
                               return (
                                 <label
                                   key={option.value}
-                                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 cursor-pointer transition-all flex-1 ${
-                                    formData.category === option.value
-                                      ? option.color + ' shadow-sm'
-                                      : 'border-gray-200 hover:border-gray-300'
-                                  }`}
+                                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 cursor-pointer transition-all flex-1 ${formData.category === option.value
+                                    ? option.color + ' shadow-sm'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                    }`}
                                 >
                                   <RadioGroupItem value={option.value} />
                                   <Icon className="size-5" />
@@ -469,15 +493,35 @@ export default function CustomSolutionPage() {
                           </div>
                         </div>
 
+                        {/* Error Message */}
+                        {submitError && (
+                          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <AlertCircle className="size-4 text-red-500 shrink-0" />
+                            <p className="text-sm text-red-600">
+                              Failed to submit request. Please try again or send via WhatsApp.
+                            </p>
+                          </div>
+                        )}
+
                         {/* Submit Buttons */}
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
                           <Button
                             type="submit"
                             size="lg"
-                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-lg shadow-amber-500/25"
+                            disabled={isSubmitting}
+                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <Send className="size-4 mr-2" />
-                            Submit Request
+                            {isSubmitting ? (
+                              <>
+                                <Loader2 className="size-4 mr-2 animate-spin" />
+                                Submitting...
+                              </>
+                            ) : (
+                              <>
+                                <Send className="size-4 mr-2" />
+                                Submit Request
+                              </>
+                            )}
                           </Button>
                           <Button
                             type="button"

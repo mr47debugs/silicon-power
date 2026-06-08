@@ -96,18 +96,52 @@ export interface Review {
   approved: boolean;
 }
 
-// Blog
+// ── Blog ──
+export type BlogCategory =
+  | 'solar-components' | 'solar-installation' | 'crane-types'
+  | 'crane-parts' | 'case-studies' | 'company-news' | 'faqs' | 'config-guides';
+
+// ✅ EXTREME SEO: Full SEO fields on BlogPost
 export interface BlogPost {
   id: string;
   title: string;
   slug: string;
   excerpt: string;
   content: string;
-  category: 'solar-guides' | 'crane-guides' | 'maintenance' | 'buying-guides' | 'trends';
-  image: string;
+  category: BlogCategory;
+
+  // ── SEO Fields (NEW) ──
+  metaTitle?: string;              // Custom SEO title (falls back to title)
+  metaDescription: string;         // Google search result description (150-160 chars)
+  keywords: string[];              // Target keywords for this post
+  ogImage: string;                 // Open Graph image (1200x630px) for social sharing
+  canonicalUrl?: string;           // Override canonical URL if needed
+
+  // ── Author Details (NEW — for JSON-LD & Author Rich Results) ──
   author: string;
-  date: string;
-  readTime: string;
+  authorUrl?: string;              // Author page/profile URL
+  authorImage?: string;            // Author photo URL
+  authorJobTitle?: string;         // e.g. "Solar Engineer"
+
+  // ── Publishing (ENHANCED) ──
+  date: string;                    // ISO 8601: "2025-01-15"
+  dateModified?: string;           // Last updated date (ISO 8601)
+  readTime: string;                // e.g. "5 min read"
+
+  // ── Image (ENHANCED) ──
+  image: string;
+  imageAlt?: string;               // Alt text for SEO + accessibility
+
+  // ── Internal Linking (NEW — crucial for SEO) ──
+  tags?: string[];                 // Tags for internal linking & topic clustering
+  relatedPostIds?: string[];       // Cross-link to related posts
+  faqItems?: FAQItem[];            // FAQ structured data for Google rich results
+}
+
+// ✅ NEW: FAQ Structured Data — Google shows FAQ rich results
+export interface FAQItem {
+  question: string;
+  answer: string;
 }
 
 // Solar Builder

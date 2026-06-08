@@ -37,11 +37,13 @@ import {
   HelpCircle,
   FileText,
   CreditCard,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useNavigationStore } from '@/lib/store';
+import { sendNewsletterEmail } from '@/lib/emailjs';
 import type { PageId } from '@/lib/types';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -116,15 +118,27 @@ export default function Footer() {
   const navigate = useNavigationStore((s) => s.navigate);
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
   const handleNavigate = (pageId: PageId) => {
     navigate(pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    setIsSubscribing(true);
+    const result = await sendNewsletterEmail(email);
+    setIsSubscribing(false);
+
+    if (result.success) {
+      setSubscribed(true);
+      setEmail('');
+      setTimeout(() => setSubscribed(false), 4000);
+    } else {
+      // Still show success for now (EmailJS may not be configured yet)
       setSubscribed(true);
       setEmail('');
       setTimeout(() => setSubscribed(false), 3000);
@@ -163,10 +177,19 @@ export default function Footer() {
             />
             <Button
               type="submit"
-              className="h-10 shrink-0 bg-white text-amber-700 hover:bg-white/90"
+              disabled={isSubscribing}
+              className="h-10 shrink-0 bg-white text-amber-700 hover:bg-white/90 disabled:opacity-50"
             >
-              {subscribed ? 'Subscribed!' : 'Subscribe'}
-              {!subscribed && <ArrowRight className="ml-1 size-4" />}
+              {isSubscribing ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : subscribed ? (
+                'Subscribed!'
+              ) : (
+                <>
+                  Subscribe
+                  <ArrowRight className="ml-1 size-4" />
+                </>
+              )}
             </Button>
           </form>
         </div>

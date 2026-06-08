@@ -193,11 +193,11 @@ export default function Header() {
             </a>
             <Separator orientation="vertical" className="h-3 bg-primary-foreground/20" />
             <a
-              href="mailto:info@solarcrane.com"
+              href="mailto:info@Silicon Power.com"
               className="flex items-center gap-1 transition-colors hover:text-amber-400"
             >
               <Mail className="size-3" />
-              <span>info@solarcrane.com</span>
+              <span>info@Silicon Power.com</span>
             </a>
           </div>
           <div className="flex items-center gap-1 text-amber-400">
@@ -225,7 +225,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-lg font-bold tracking-tight text-primary">
-                SolarCrane
+                Silicon Power
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-widest text-amber-600">
                 Pro
@@ -327,8 +327,8 @@ export default function Header() {
 
       {/* ─── Navigation Bar (Desktop) ─────────────────────────────────────── */}
       <nav className="hidden border-b bg-white lg:block">
-        <div className="mx-auto max-w-7xl px-4">
-          <NavigationMenu className="h-10 w-full justify-start">
+        <div className="mx-auto flex max-w-7xl items-center justify-center px-4">
+          <NavigationMenu className="h-10 w-full justify-center">
             <NavigationMenuList className="gap-0">
               {/* Home */}
               <NavigationMenuItem>
@@ -368,7 +368,6 @@ export default function Header() {
                       : 'border-transparent text-foreground hover:border-amber-500 hover:text-amber-600'
                   }`}
                 >
-                  <Sun className="mr-1.5 size-4" />
                   Solar
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -441,7 +440,6 @@ export default function Header() {
                       : 'border-transparent text-foreground hover:border-amber-500 hover:text-amber-600'
                   }`}
                 >
-                  <Anchor className="mr-1.5 size-4" />
                   Crane
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -510,7 +508,6 @@ export default function Header() {
                   }`}
                   onClick={() => handleNavigate('compare')}
                 >
-                  <GitCompareArrows className="size-4" />
                   Compare
                   {compareItems.length > 0 && (
                     <Badge className="ml-1 bg-amber-500 px-1.5 py-0 text-[10px] font-bold text-white">
@@ -589,7 +586,7 @@ export default function Header() {
                 <Sun className="size-4 text-white" />
               </div>
               <div className="flex flex-col leading-none">
-                <span className="text-base font-bold text-primary">SolarCrane</span>
+                <span className="text-base font-bold text-primary">Silicon Power</span>
                 <span className="text-[9px] font-semibold uppercase tracking-widest text-amber-600">
                   Pro
                 </span>

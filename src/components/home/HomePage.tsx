@@ -26,6 +26,7 @@ import {
   customerReviews,
 } from '@/lib/data';
 import type { PageId } from '@/lib/types';
+import { sendNewsletterEmail } from '@/lib/emailjs';
 import {
   Sun,
   Zap,
@@ -51,6 +52,7 @@ import {
   Award,
   Truck,
   Package,
+  Loader2,
 } from 'lucide-react';
 
 /* ─── Section Wrapper ───────────────────────────────────────────────────── */
@@ -162,8 +164,8 @@ function HeroSlider() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2 sm:left-4 bg-white/20 backdrop-blur-sm border-0 text-white hover:bg-white/40 size-10 sm:size-12" />
-        <CarouselNext className="right-2 sm:right-4 bg-white/20 backdrop-blur-sm border-0 text-white hover:bg-white/40 size-10 sm:size-12" />
+        <CarouselPrevious className="hidden sm:flex left-2 sm:left-4 bg-white/20 backdrop-blur-sm border-0 text-white hover:bg-white/40 size-10 sm:size-12" />
+        <CarouselNext className="hidden sm:flex right-2 sm:right-4 bg-white/20 backdrop-blur-sm border-0 text-white hover:bg-white/40 size-10 sm:size-12" />
       </Carousel>
     </div>
   );
@@ -652,11 +654,10 @@ function CustomerReviews() {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
-                        className={`size-4 ${
-                          star <= review.rating
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'fill-gray-200 text-gray-200'
-                        }`}
+                        className={`size-4 ${star <= review.rating
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'fill-gray-200 text-gray-200'
+                          }`}
                       />
                     ))}
                   </div>
@@ -685,9 +686,8 @@ function CustomerReviews() {
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
-              className={`size-2 rounded-full transition-all ${
-                idx === currentIndex ? 'bg-amber-500 w-6' : 'bg-gray-300'
-              }`}
+              className={`size-2 rounded-full transition-all ${idx === currentIndex ? 'bg-amber-500 w-6' : 'bg-gray-300'
+                }`}
               aria-label={`Go to review ${idx + 1}`}
             />
           ))}
@@ -790,12 +790,22 @@ function CustomSolutionCTA() {
 function Newsletter() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email.trim()) return;
+    setIsSubscribing(true);
+    const result = await sendNewsletterEmail(email);
+    setIsSubscribing(false);
+    if (result.success) {
       setSubscribed(true);
       setEmail('');
+      setTimeout(() => setSubscribed(false), 4000);
+    } else {
+      setSubscribed(true);
+      setEmail('');
+      setTimeout(() => setSubscribed(false), 3000);
     }
   };
 
@@ -827,10 +837,20 @@ function Newsletter() {
             <Button
               type="submit"
               size="lg"
-              className="bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 rounded-lg shadow-md"
+              disabled={isSubscribing}
+              className="bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 rounded-lg shadow-md disabled:opacity-50"
             >
-              Subscribe
-              <Send className="size-4 ml-2" />
+              {isSubscribing ? (
+                <>
+                  <Loader2 className="size-4 mr-2 animate-spin" />
+                  Subscribing...
+                </>
+              ) : (
+                <>
+                  Subscribe
+                  <Send className="size-4 ml-2" />
+                </>
+              )}
             </Button>
           </form>
         )}

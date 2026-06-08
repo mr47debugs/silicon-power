@@ -15,7 +15,11 @@ import {
   Instagram,
   Globe,
   ChevronDown,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
+import { sendContactEmail } from '@/lib/emailjs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -117,6 +121,8 @@ export default function ContactPage() {
     message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -124,10 +130,26 @@ export default function ContactPage() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // In a real app, send to API
+    setIsSubmitting(true);
+    setSubmitError(false);
+
+    const result = await sendContactEmail({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.subject,
+      message: formData.message,
+    });
+
+    setIsSubmitting(false);
+
+    if (result.success) {
+      setIsSubmitted(true);
+    } else {
+      setSubmitError(true);
+    }
   };
 
   return (
@@ -185,10 +207,10 @@ export default function ContactPage() {
                     {isSubmitted ? (
                       <div className="text-center py-12">
                         <div className="inline-flex items-center justify-center size-16 rounded-full bg-emerald-100 mx-auto mb-4">
-                          <Send className="size-8 text-emerald-600" />
+                          <CheckCircle2 className="size-8 text-emerald-600" />
                         </div>
                         <h3 className="text-lg font-bold text-gray-900 mb-2">
-                          Message Sent!
+                          Message Sent Successfully!
                         </h3>
                         <p className="text-sm text-gray-500 mb-4">
                           Thank you for reaching out. Our team will contact you
@@ -198,6 +220,7 @@ export default function ContactPage() {
                           variant="outline"
                           onClick={() => {
                             setIsSubmitted(false);
+                            setSubmitError(false);
                             setFormData({
                               name: '',
                               email: '',
@@ -308,13 +331,32 @@ export default function ContactPage() {
                           />
                         </div>
 
+                        {submitError && (
+                          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <AlertCircle className="size-4 text-red-500 shrink-0" />
+                            <p className="text-sm text-red-600">
+                              Failed to send message. Please try again or contact us on WhatsApp.
+                            </p>
+                          </div>
+                        )}
+
                         <Button
                           type="submit"
                           size="lg"
-                          className="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-lg shadow-amber-500/25"
+                          disabled={isSubmitting}
+                          className="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <Send className="size-4 mr-2" />
-                          Send Message
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="size-4 mr-2 animate-spin" />
+                              Sending...
+                            </>
+                          ) : (
+                            <>
+                              <Send className="size-4 mr-2" />
+                              Send Message
+                            </>
+                          )}
                         </Button>
                       </form>
                     )}

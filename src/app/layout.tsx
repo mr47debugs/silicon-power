@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SolarCrane Pro - Premium Solar Systems & Crane Parts",
+  title: "Silicon Power",
   description:
     "Premium e-commerce platform for solar systems, solar components, crane parts, and complete crane solutions. Configure custom systems, compare products, and get AI recommendations.",
   keywords: [
