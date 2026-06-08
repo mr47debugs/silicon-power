@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllBlogSlugs } from "@/lib/data";
 
-const SITE_URL = "https://siliconpower.com";
+const SITE_URL = "https://silicon-power.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const blogSlugs = getAllBlogSlugs();

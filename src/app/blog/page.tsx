@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "Blog — Complete Guides on Solar Systems & Cranes | Silicon Power",
     description:
       "Expert guides on solar panels, inverters, batteries, and complete solar systems. Plus crane types, parts, and configuration guides.",
-    url: "https://siliconpower.com/blog",
+    url: "https://silicon-power.vercel.app/blog",
     type: "website",
     images: [
       {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://siliconpower.com/blog",
+    canonical: "https://silicon-power.vercel.app/blog",
   },
 };
 
@@ -61,16 +61,16 @@ export default function BlogPageRoute() {
             "@context": "https://schema.org",
             "@type": "Blog",
             name: "Silicon Power Blog",
-            url: "https://siliconpower.com/blog",
+            url: "https://silicon-power.vercel.app/blog",
             description:
               "Expert guides on solar panels, inverters, batteries, and complete solar systems. Plus crane types, parts, and configuration guides.",
             publisher: {
               "@type": "Organization",
               name: "Silicon Power",
-              url: "https://siliconpower.com",
+              url: "https://silicon-power.vercel.app",
               logo: {
                 "@type": "ImageObject",
-                url: "https://siliconpower.com/logo.svg",
+                url: "https://silicon-power.vercel.app/logo.svg",
               },
             },
             blogPost: [
@@ -78,7 +78,7 @@ export default function BlogPageRoute() {
                 "@type": "BlogPosting",
                 headline:
                   "Solar Panels Explained: JinkoSolar, LONGi, Trina & How to Choose",
-                url: "https://siliconpower.com/blog/solar-panels-jinkosolar-longi-trina-how-to-choose",
+                url: "https://silicon-power.vercel.app/blog/solar-panels-jinkosolar-longi-trina-how-to-choose",
                 datePublished: "2026-05-10",
                 author: {
                   "@type": "Person",
@@ -89,7 +89,7 @@ export default function BlogPageRoute() {
                 "@type": "BlogPosting",
                 headline:
                   "Solar Inverters: Huawei, Sungrow, SMA, SolarEdge – String vs. Micro vs. Hybrid",
-                url: "https://siliconpower.com/blog/solar-inverters-huawei-sungrow-sma-solaredge-string-micro-hybrid",
+                url: "https://silicon-power.vercel.app/blog/solar-inverters-huawei-sungrow-sma-solaredge-string-micro-hybrid",
                 datePublished: "2026-05-15",
                 author: {
                   "@type": "Person",
@@ -100,7 +100,7 @@ export default function BlogPageRoute() {
                 "@type": "BlogPosting",
                 headline:
                   "Crane Parts 101: Base, Mast, Boom, Jib, Hoist, Hook, and Counterweights",
-                url: "https://siliconpower.com/blog/crane-parts-101-base-mast-boom-jib-hoist-hook-counterweights-explained",
+                url: "https://silicon-power.vercel.app/blog/crane-parts-101-base-mast-boom-jib-hoist-hook-counterweights-explained",
                 datePublished: "2026-05-30",
                 author: {
                   "@type": "Person",
@@ -111,7 +111,7 @@ export default function BlogPageRoute() {
                 "@type": "BlogPosting",
                 headline:
                   "Case Study: Off-Grid Solar System for Remote Clinic",
-                url: "https://siliconpower.com/blog/case-study-off-grid-solar-longi-sungrow-schletter-remote-clinic",
+                url: "https://silicon-power.vercel.app/blog/case-study-off-grid-solar-longi-sungrow-schletter-remote-clinic",
                 datePublished: "2026-06-20",
                 author: {
                   "@type": "Person",
@@ -133,13 +133,13 @@ export default function BlogPageRoute() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://siliconpower.com",
+                item: "https://silicon-power.vercel.app",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Blog",
-                item: "https://siliconpower.com/blog",
+                item: "https://silicon-power.vercel.app/blog",
               },
             ],
           }),

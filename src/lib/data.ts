@@ -2019,13 +2019,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Compare JinkoSolar, LONGi, and Trina Solar panels — efficiency, warranty, price, and real-world performance. Monocrystalline vs polycrystalline vs thin-film explained.',
     keywords: ['solar panels comparison', 'JinkoSolar vs LONGi vs Trina', 'best solar panels 2026', 'monocrystalline vs polycrystalline', 'solar panel efficiency', 'solar panel buying guide'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Solar+Panels+Explained+2026',
-    canonicalUrl: 'https://siliconpower.com/blog/solar-panels-jinkosolar-longi-trina-how-to-choose',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/solar-panels-jinkosolar-longi-trina-how-to-choose',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Solar+Panels+Explained',
     imageAlt: 'Comparison of JinkoSolar, LONGi, and Trina solar panels with efficiency ratings and specifications',
 
     author: 'Dr. Sarah Chen',
-    authorUrl: 'https://siliconpower.com/blog/author/dr-sarah-chen',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/dr-sarah-chen',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=SC',
     authorJobTitle: 'Solar Energy Research Director',
 
@@ -2054,13 +2054,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'String vs micro vs hybrid inverters — Huawei, SMA, SolarEdge, and Sungrow compared. Find the best inverter for on-grid, off-grid, or hybrid solar systems.',
     keywords: ['solar inverter comparison', 'Huawei vs SMA inverter', 'string vs micro inverter', 'hybrid solar inverter', 'best solar inverter 2026', 'SolarEdge inverter review'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Solar+Inverters+Compared+2026',
-    canonicalUrl: 'https://siliconpower.com/blog/solar-inverters-huawei-sungrow-sma-solaredge-string-micro-hybrid',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/solar-inverters-huawei-sungrow-sma-solaredge-string-micro-hybrid',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Solar+Inverters+Guide',
     imageAlt: 'Solar inverter comparison chart showing Huawei, SMA, SolarEdge, and Sungrow string, micro, and hybrid models',
 
     author: 'James Rodriguez',
-    authorUrl: 'https://siliconpower.com/blog/author/james-rodriguez',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/james-rodriguez',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=JR',
     authorJobTitle: 'Senior Solar Engineer',
 
@@ -2088,13 +2088,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Roof-mount, ground-mount, and floating solar structures compared. Schletter, Antaisolar, and Van der Valk — wind load, tilt angles, and corrosion resistance guide.',
     keywords: ['solar mounting systems', 'Schletter solar racking', 'ground mount solar', 'roof mount solar structure', 'floating solar', 'solar panel tilt angle', 'wind load calculation solar'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Mounting+Systems+Guide+2026',
-    canonicalUrl: 'https://siliconpower.com/blog/mounting-systems-schletter-antaisolar-van-der-valk-roof-ground-floating',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/mounting-systems-schletter-antaisolar-van-der-valk-roof-ground-floating',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Mounting+Systems+Guide',
     imageAlt: 'Solar mounting systems comparison — roof mount, ground mount, and floating solar installations',
 
     author: 'Erik Johansson',
-    authorUrl: 'https://siliconpower.com/blog/author/erik-johansson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/erik-johansson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=EJ',
     authorJobTitle: 'Structural Engineer, Solar Division',
 
@@ -2117,13 +2117,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Step-by-step solar system configuration — match panels to inverters, choose mounting, calculate ROI. Real example with Trina, Huawei, and IronRidge components.',
     keywords: ['configure solar system', 'solar system design guide', 'solar panel inverter matching', 'complete solar system setup', 'solar ROI calculator', 'solar installation guide 2026'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Complete+Solar+System+Config+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/configure-complete-solar-system-panels-inverter-mounting-step-by-step',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/configure-complete-solar-system-panels-inverter-mounting-step-by-step',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Solar+System+Config',
     imageAlt: 'Step-by-step diagram showing how to configure a complete solar system with panels, inverter, and mounting',
 
     author: 'Dr. Sarah Chen',
-    authorUrl: 'https://siliconpower.com/blog/author/dr-sarah-chen',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/dr-sarah-chen',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=SC',
     authorJobTitle: 'Solar Energy Research Director',
 
@@ -2152,13 +2152,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Complete guide to crane components — base, mast, boom, jib, hoist, hook, and counterweights. Learn each part\'s function, failure signs, and maintenance tips.',
     keywords: ['crane parts explained', 'crane components guide', 'crane mast and boom', 'crane hoist mechanism', 'crane hook types', 'crane counterweight calculation', 'overhead crane parts'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Crane+Parts+101+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/crane-parts-101-base-mast-boom-jib-hoist-hook-counterweights-explained',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/crane-parts-101-base-mast-boom-jib-hoist-hook-counterweights-explained',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Crane+Parts+101',
     imageAlt: 'Annotated diagram showing all major crane parts — base, mast, boom, jib, hoist, hook, and counterweights',
 
     author: 'Mark Thompson, CCO',
-    authorUrl: 'https://siliconpower.com/blog/author/mark-thompson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/mark-thompson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=MT',
     authorJobTitle: 'Chief Crane Operations Officer',
 
@@ -2186,13 +2186,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Liebherr, Tadano, and Manitowoc all-terrain and heavy-lift cranes compared — capacity, mobility, terrain adaptability, and pricing for construction projects.',
     keywords: ['all-terrain crane comparison', 'Liebherr crane', 'Tadano crane', 'Manitowoc crane', 'heavy-lift crane', 'construction crane guide', 'crane brands compared 2026'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=All-Terrain+Cranes+Compared+2026',
-    canonicalUrl: 'https://siliconpower.com/blog/all-terrain-heavy-lift-cranes-liebherr-tadano-manitowoc-compared',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/all-terrain-heavy-lift-cranes-liebherr-tadano-manitowoc-compared',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=All-Terrain+Cranes',
     imageAlt: 'Liebherr, Tadano, and Manitowoc all-terrain cranes compared side by side',
 
     author: 'Erik Johansson',
-    authorUrl: 'https://siliconpower.com/blog/author/erik-johansson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/erik-johansson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=EJ',
     authorJobTitle: 'Structural Engineer, Solar Division',
 
@@ -2215,13 +2215,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Tower cranes for high-rise construction — Liebherr, Zoomlion, and Sany compared. Climbing mechanisms, jib configurations, counterweights, and safety systems explained.',
     keywords: ['tower crane guide', 'Liebherr tower crane', 'Zoomlion tower crane', 'Sany tower crane', 'high-rise crane', 'tower crane climbing system', 'tower crane jib length'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Tower+Cranes+High-Rise+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/tower-cranes-high-rise-liebherr-zoomlion-sany-mast-jib-counterweights',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/tower-cranes-high-rise-liebherr-zoomlion-sany-mast-jib-counterweights',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Tower+Cranes+Guide',
     imageAlt: 'Tower crane on high-rise construction site — mast, jib, and counterweight systems',
 
     author: 'Mark Thompson, CCO',
-    authorUrl: 'https://siliconpower.com/blog/author/mark-thompson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/mark-thompson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=MT',
     authorJobTitle: 'Chief Crane Operations Officer',
 
@@ -2248,13 +2248,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Wheeled vs crawler mobile cranes — XCMG, Sany, Zoomlion, Terex, and Tadano compared on transportability, setup time, and lift capacity for different job sites.',
     keywords: ['mobile crane comparison', 'wheeled vs crawler crane', 'XCMG crane', 'Sany mobile crane', 'Tadano crane', 'Zoomlion crane', 'Terex crane', 'crawler crane guide'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Mobile+Cranes+Wheeled+vs+Crawler',
-    canonicalUrl: 'https://siliconpower.com/blog/mobile-cranes-xcmg-sany-zoomlion-terex-tadano-wheeled-vs-crawler',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/mobile-cranes-xcmg-sany-zoomlion-terex-tadano-wheeled-vs-crawler',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Mobile+Cranes+Guide',
     imageAlt: 'Mobile cranes comparison — wheeled truck crane vs crawler crane on construction sites',
 
     author: 'Erik Johansson',
-    authorUrl: 'https://siliconpower.com/blog/author/erik-johansson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/erik-johansson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=EJ',
     authorJobTitle: 'Structural Engineer, Solar Division',
 
@@ -2277,13 +2277,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Complete guide to crane hoist and hook systems — wire ropes, winches, gearboxes, drums, and safety latches. Inspection frequencies, load limits, and maintenance tips.',
     keywords: ['crane hoist system', 'wire rope guide', 'crane hook safety', 'lifting mechanism', 'winch system', 'hoist gearbox', 'wire rope inspection', 'crane lifting capacity'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Hoist+Hook+Systems+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/hoist-hook-systems-wire-ropes-winches-lifting-mechanisms',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/hoist-hook-systems-wire-ropes-winches-lifting-mechanisms',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Hoist+Hook+Systems',
     imageAlt: 'Crane hoist and hook system components — wire rope, drum, gearbox, and safety latch detail',
 
     author: 'Mark Thompson, CCO',
-    authorUrl: 'https://siliconpower.com/blog/author/mark-thompson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/mark-thompson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=MT',
     authorJobTitle: 'Chief Crane Operations Officer',
 
@@ -2310,13 +2310,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Physics of crane stability — counterweight calculation, leverage principles, and automatic load moment indicators. Learn why cranes stay upright under massive loads.',
     keywords: ['crane counterweight', 'crane stability', 'load moment indicator', 'crane tipping point', 'counterweight calculation', 'crane physics', 'LMI system', 'crane safety'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Crane+Counterweights+Stability',
-    canonicalUrl: 'https://siliconpower.com/blog/counterweights-stability-why-cranes-dont-tip-over',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/counterweights-stability-why-cranes-dont-tip-over',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Counterweights+Stability',
     imageAlt: 'Diagram showing crane counterweight physics — leverage, fulcrum point, and stability calculation',
 
     author: 'Erik Johansson',
-    authorUrl: 'https://siliconpower.com/blog/author/erik-johansson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/erik-johansson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=EJ',
     authorJobTitle: 'Structural Engineer, Solar Division',
 
@@ -2339,13 +2339,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Real case study — custom-configured a 50-ton crawler crane with boom extension, jib addition, and LMI recalibration for a bridge construction project. Part numbers included.',
     keywords: ['crawler crane case study', 'crane configuration', 'boom extension', 'crane jib installation', 'LMI calibration', '50 ton crane', 'bridge construction crane'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=50+Ton+Crawler+Crane+Case+Study',
-    canonicalUrl: 'https://siliconpower.com/blog/case-study-custom-configured-50-ton-crawler-crane-boom-extension-jib-lmi',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/case-study-custom-configured-50-ton-crawler-crane-boom-extension-jib-lmi',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Crane+Case+Study',
     imageAlt: 'Custom-configured 50-ton crawler crane with boom extension on bridge construction site',
 
     author: 'Mark Thompson, CCO',
-    authorUrl: 'https://siliconpower.com/blog/author/mark-thompson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/mark-thompson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=MT',
     authorJobTitle: 'Chief Crane Operations Officer',
 
@@ -2368,13 +2368,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Real case study — off-grid solar installation for a remote clinic using LONGi Hi-MO 6 panels, Sungrow inverter, and Schletter ground mount. Component list, battery sizing, and 6-month performance data.',
     keywords: ['off-grid solar case study', 'LONGi panels', 'Sungrow inverter', 'Schletter mounting', 'remote solar installation', 'solar clinic', 'off-grid solar design'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Off-Grid+Solar+Clinic+Case+Study',
-    canonicalUrl: 'https://siliconpower.com/blog/case-study-off-grid-solar-longi-sungrow-schletter-remote-clinic',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/case-study-off-grid-solar-longi-sungrow-schletter-remote-clinic',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Solar+Case+Study',
     imageAlt: 'Off-grid solar system installation at a remote clinic with LONGi panels and Schletter ground mount',
 
     author: 'Dr. Sarah Chen',
-    authorUrl: 'https://siliconpower.com/blog/author/dr-sarah-chen',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/dr-sarah-chen',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=SC',
     authorJobTitle: 'Solar Energy Research Director',
 
@@ -2401,13 +2401,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'How to diagnose crane slew ring and hydraulic cylinder failures — symptoms, inspection steps, repair vs replace decisions, and prevention tips for tower and mobile cranes.',
     keywords: ['crane failure diagnosis', 'slew ring failure', 'hydraulic cylinder problem', 'crane inspection', 'crane repair', 'crane maintenance', 'crane troubleshooting', 'slewing bearing replacement'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Crane+Failure+Diagnosis+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/crane-part-failure-diagnose-slew-ring-hydraulic-cylinder-issue',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/crane-part-failure-diagnose-slew-ring-hydraulic-cylinder-issue',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Crane+Failure+Diagnosis',
     imageAlt: 'Crane slew ring and hydraulic cylinder failure diagnosis — inspection and repair guide',
 
     author: 'Mark Thompson, CCO',
-    authorUrl: 'https://siliconpower.com/blog/author/mark-thompson',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/mark-thompson',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=MT',
     authorJobTitle: 'Chief Crane Operations Officer',
 
@@ -2435,13 +2435,13 @@ export const blogPosts: BlogPost[] = [
     metaDescription: 'Complete solar inverter error code guide for Huawei SUN2000, SMA Sunny Tripower, and SolarEdge — grid loss, isolation fault, DC overvoltage fixes and when to call a professional.',
     keywords: ['solar inverter error codes', 'Huawei inverter fault', 'SMA inverter error', 'SolarEdge error code', 'grid loss solar', 'isolation fault', 'DC overvoltage', 'inverter troubleshooting'],
     ogImage: 'https://placehold.co/1200x630/1a1a2e/ffd700?text=Inverter+Error+Codes+Fix+Guide',
-    canonicalUrl: 'https://siliconpower.com/blog/solar-inverter-error-codes-huawei-sma-solaredge-meaning-fix',
+    canonicalUrl: 'https://silicon-power.vercel.app/blog/solar-inverter-error-codes-huawei-sma-solaredge-meaning-fix',
 
     image: 'https://placehold.co/800x400/1a1a2e/ffd700?text=Inverter+Error+Codes',
     imageAlt: 'Solar inverter error code display — Huawei, SMA, and SolarEdge troubleshooting guide',
 
     author: 'James Rodriguez',
-    authorUrl: 'https://siliconpower.com/blog/author/james-rodriguez',
+    authorUrl: 'https://silicon-power.vercel.app/blog/author/james-rodriguez',
     authorImage: 'https://placehold.co/100x100/1a1a2e/ffd700?text=JR',
     authorJobTitle: 'Senior Solar Engineer',
 

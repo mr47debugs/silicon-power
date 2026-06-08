@@ -20,7 +20,7 @@ import type { BlogPost } from "@/lib/types";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
-const SITE_URL = "https://siliconpower.com";
+const SITE_URL = "https://silicon-power.vercel.app";
 
 const categoryLabels: Record<string, string> = {
     "solar-components": "Solar – Components & Brands",
